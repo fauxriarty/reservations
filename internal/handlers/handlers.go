@@ -99,6 +99,30 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// send the reservation data to the reservation-summary page if the form is valid and submitted
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+
+}
+
+// renders the reservn summary page after submitting make reservation form
+func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+
+	// get the reservation data from the session and type assert it to a reservation struct
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		log.Println("Cannot get item from session")
+
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+
+	render.RenderTemplate(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
+
 }
 
 // renders the generals room page

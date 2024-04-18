@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/fauxriarty/reservations/internal/config"
 	"github.com/fauxriarty/reservations/internal/handlers"
+	"github.com/fauxriarty/reservations/internal/models"
 	"github.com/fauxriarty/reservations/internal/render"
 )
 
@@ -19,6 +21,9 @@ var session *scs.SessionManager
 
 // main is the main function
 func main() {
+	// what the session is going to store
+	gob.Register(models.Reservation{})
+
 	app.InProduction = false // set to true in production
 
 	//sessions is like the sharedpref of websites,
