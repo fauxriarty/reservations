@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/fauxriarty/reservations/pkg/config"
-	"github.com/fauxriarty/reservations/pkg/models"
-	"github.com/fauxriarty/reservations/pkg/render"
+	"github.com/fauxriarty/reservations/internal/config"
+	"github.com/fauxriarty/reservations/internal/models"
+	"github.com/fauxriarty/reservations/internal/render"
 )
 
 // repo is the repository used by the handlers

@@ -2,51 +2,51 @@
 
 {{define "content"}}
 
-    <div class="container">
+<div class="container">
 
 
-        <div class="row">
-            <div class="col">
-                <img src="/static/images/generals-quarters.png"
-                     class="img-fluid img-thumbnail mx-auto d-block room-image" alt="room image">
-            </div>
+    <div class="row">
+        <div class="col">
+            <img src="/static/images/generals-quarters.png" class="img-fluid img-thumbnail mx-auto d-block room-image"
+                alt="room image">
         </div>
-
-
-        <div class="row">
-            <div class="col">
-                <h1 class="text-center mt-4">General's Quarters</h1>
-                <p>
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                </p>
-            </div>
-        </div>
-
-
-        <div class="row">
-
-            <div class="col text-center">
-
-                <a id="check-availability-button" href="#!" class="btn btn-success">Check Availability</a>
-
-            </div>
-        </div>
-
-
-
-
     </div>
+
+
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center mt-4">General's Quarters</h1>
+            <p>
+                Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                to remember.
+                Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                to remember.
+                Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                to remember.
+                Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                to remember.
+                Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                to remember.
+                Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                to remember.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col text-center">
+
+            <a id="check-availability-button" href="#!" class="btn btn-success">Check Availability</a>
+
+        </div>
+    </div>
+
+
+
+
+</div>
 
 {{end}}
 
@@ -54,6 +54,8 @@
 {{define "js"}}
 <script>
     document.getElementById("check-availability-button").addEventListener("click", function () {
+
+        // this is the custom HTML for the popup dialog that will be shown
         let html = `
         <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
             <div class="form-row">
@@ -75,19 +77,43 @@
             title: 'Choose your dates',
             msg: html,
 
+            willOpen: () => {
+                const elem = document.getElementById("reservation-dates-modal");
+                const rp = new DateRangePicker(elem, {
+                    format: 'yyyy-mm-dd',
+                    showOnFocus: true,
+                })
+            },
+
+            didOpen: () => {
+                document.getElementById("start").removeAttribute("disabled");
+                document.getElementById("end").removeAttribute("disabled");
+            },
+
+
             // this function will be called if result is not empty or the dialog was not cancelled
-            callback:function(result){
+            callback: function (result) {
                 console.log("called");
 
-                fetch('/search-availability-json')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    console.log(data.ok);
-                    console.log(data.message);
+                let form = document.getElementById("check-availability-form");
+                let formData = new FormData(form);
+
+                //for this dialog's CSRF token, instead of writing it into the HTML we 
+                // are appending it to the form data programmatically
+                formData.append("csrf_token", "{{.CSRFToken}}");
+
+                fetch('/search-availability-json', {
+                    method: "post", // converts the fetch request into a post 
+                    body: formData  // will post the form data fetched  
                 })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        console.log(data.ok);
+                        console.log(data.message);
+                    })
             }
-            });
         });
+    });
 </script>
 {{end}}

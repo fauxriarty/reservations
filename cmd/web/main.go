@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/fauxriarty/reservations/pkg/config"
-	"github.com/fauxriarty/reservations/pkg/handlers"
-	"github.com/fauxriarty/reservations/pkg/render"
+	"github.com/fauxriarty/reservations/internal/config"
+	"github.com/fauxriarty/reservations/internal/handlers"
+	"github.com/fauxriarty/reservations/internal/render"
 )
 
 const portNumber = ":8080"

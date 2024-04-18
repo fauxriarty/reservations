@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/fauxriarty/reservations/pkg/config"
-	"github.com/fauxriarty/reservations/pkg/models"
+	"github.com/fauxriarty/reservations/internal/config"
+	"github.com/fauxriarty/reservations/internal/models"
 	"github.com/justinas/nosurf"
 )
 
